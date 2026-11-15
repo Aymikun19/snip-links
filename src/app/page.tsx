@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/supabase/config";
 import Link from "next/link";
 import { requireUser } from "@/lib/supabase/server";
 import { CreateLink } from "./CreateLink";
@@ -7,7 +8,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const { notfound } = await searchParams;
   const { supabase } = await requireUser();
   const { data: links } = await supabase.from("links").select("id, slug, url, title, created_at, clicks(count)").order("created_at", { ascending: false });
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const origin = SITE_URL;
   return (
     <div className="grid gap-6">
       {notfound && <p className="card border-amber-200 bg-amber-50 p-3 text-sm">No link called “{notfound}”.</p>}
