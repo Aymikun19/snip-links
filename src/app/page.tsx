@@ -1,3 +1,4 @@
+import { MousePointerClick, Trash2 } from "lucide-react";
 import { SITE_URL } from "@/lib/supabase/config";
 import Link from "next/link";
 import { requireUser } from "@/lib/supabase/server";
@@ -23,8 +24,10 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
               <p className="truncate text-xs text-stone-500">{l.url}</p>
             </div>
             <div className="flex items-center gap-3 text-sm">
-              <span className="badge">{(l.clicks as unknown as { count: number }[])[0]?.count ?? 0} clicks</span>
-              <form action={deleteLink.bind(null, l.id)}><button className="text-xs text-stone-400 hover:text-red-600">delete</button></form>
+              <span className="badge inline-flex items-center gap-1"><MousePointerClick size={12} aria-hidden /> {(l.clicks as unknown as { count: number }[])[0]?.count ?? 0} clicks</span>
+              <form action={deleteLink.bind(null, l.id)}>
+                <button className="text-stone-400 hover:text-red-600" aria-label={`Delete /${l.slug}`}><Trash2 size={15} /></button>
+              </form>
             </div>
           </div>
         ))}

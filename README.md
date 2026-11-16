@@ -1,3 +1,5 @@
+<img src="public/logo.svg" alt="" width="64" height="64">
+
 # Snip: Link Shortener with Analytics
 
 Create short links (`snip.app/my-talk`) and see who clicks them: clicks per day, top referrers, devices and countries.

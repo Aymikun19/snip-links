@@ -1,3 +1,4 @@
+import { CornerDownRight } from "lucide-react";
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/supabase/server";
 import { dailySeries, topBy, type Click } from "@/lib/analytics";
@@ -16,7 +17,9 @@ export default async function LinkStats({ params }: { params: Promise<{ id: stri
     <div className="grid gap-6">
       <div>
         <h1 className="text-2xl font-semibold">/{link.slug}</h1>
-        <p className="truncate text-sm text-stone-500">→ {link.url}</p>
+        <p className="flex items-center gap-1 truncate text-sm text-stone-500">
+          <CornerDownRight size={14} className="shrink-0" aria-hidden /> {link.url}
+        </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-3">
         <Stat label="Clicks (30 days)" value={humans.length} />
