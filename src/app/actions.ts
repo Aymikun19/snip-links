@@ -27,3 +27,19 @@ export async function deleteLink(id: string) {
   await supabase.from("links").delete().eq("id", id);
   revalidatePath("/");
 }
+
+export async function updateLink(id: string, _prev: { error?: string; ok?: boolean }, form: FormData): Promise<{ error?: string; ok?: boolean }> {
+  const { supabase } = await requireUser();
+  const url = String(form.get("url") || "").trim();
+  try {
+    const u = new URL(url);
+    if (!["http:", "https:"].includes(u.protocol)) throw new Error();
+  } catch {
+    return { error: "Enter a full URL starting with http:// or https://" };
+  }
+  const { error } = await supabase.from("links").update({ url, title: String(form.get("title") || "").trim() || null }).eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath(`/links/${id}`);
+  revalidatePath("/");
+  return { ok: true };
+}
