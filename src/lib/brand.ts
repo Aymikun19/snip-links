@@ -26,5 +26,5 @@ export const brand = {
   nav: [{ href: "/", label: "Links" }] as { href: string; label: string; public?: boolean }[],
   width: "max-w-5xl",
   repo: "https://github.com/Aymikun19/snip-links",
-  preview: null as string | null,
+  preview: "/preview.webp" as string | null,
 };
