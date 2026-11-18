@@ -2,12 +2,13 @@
 
 import { ArrowUpDown, ChartArea, Search, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { linkState } from "@/lib/link-state";
 import { useMemo, useState } from "react";
 import { CopyButton } from "@/components/kit/CopyButton";
 import { Sparkline } from "@/components/kit/Charts";
 import { deleteLink } from "./actions";
 
-export type LinkRow = { id: string; slug: string; url: string; title: string | null; created_at: string; total: number; trend: number[] };
+export type LinkRow = { id: string; slug: string; url: string; title: string | null; created_at: string; total: number; trend: number[]; active: boolean; expires_at: string | null };
 
 export function LinkList({ links, origin }: { links: LinkRow[]; origin: string }) {
   const [q, setQ] = useState("");
@@ -40,6 +41,7 @@ export function LinkList({ links, origin }: { links: LinkRow[]; origin: string }
             <div className="min-w-0 flex-1">
               <Link href={`/links/${l.id}`} className="font-mono font-medium text-accent hover:underline">{host}/{l.slug}</Link>
               {l.title && <span className="ml-2 text-sm text-stone-700">{l.title}</span>}
+              {(() => { const st = linkState(l); return st.label ? <span className={`badge ml-2 !text-xs ${st.tone}`}>{st.label}</span> : null; })()}
               <p className="truncate text-xs text-stone-500">{l.url}</p>
             </div>
             <div className="hidden sm:block" title="Clicks over the last 14 days"><Sparkline values={l.trend} width={96} height={28} /></div>

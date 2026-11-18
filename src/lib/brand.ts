@@ -14,7 +14,7 @@ export const brand = {
     { icon: ChartArea, title: "Click analytics", text: "Daily clicks, top referrers and device breakdowns, charted for each link." },
     { icon: QrCode, title: "QR code for every link", text: "Download a QR code for posters, flyers and slides." },
     { icon: Smartphone, title: "Overview dashboard", text: "Total clicks, your top link and a 14-day trend across all your links." },
-    { icon: PencilLine, title: "Edit destinations", text: "Change where a link points without reprinting it." },
+    { icon: PencilLine, title: "Edit, pause or expire", text: "Change where a link points, pause it, or give it an end date, all without reprinting it." },
     { icon: FileDown, title: "Export clicks", text: "Download raw click data as CSV for your own analysis." },
   ],
   steps: [

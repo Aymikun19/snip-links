@@ -37,9 +37,22 @@ export async function updateLink(id: string, _prev: { error?: string; ok?: boole
   } catch {
     return { error: "Enter a full URL starting with http:// or https://" };
   }
-  const { error } = await supabase.from("links").update({ url, title: String(form.get("title") || "").trim() || null }).eq("id", id);
+  const exp = String(form.get("expires") || "").trim();
+  const expires_at = exp ? new Date(`${exp}T23:59:59+01:00`) : null;
+  if (expires_at && Number.isNaN(expires_at.getTime())) return { error: "Pick a valid expiry date" };
+  const { error } = await supabase
+    .from("links")
+    .update({ url, title: String(form.get("title") || "").trim() || null, expires_at: expires_at?.toISOString() ?? null })
+    .eq("id", id);
   if (error) return { error: error.message };
   revalidatePath(`/links/${id}`);
   revalidatePath("/");
   return { ok: true };
+}
+
+export async function setLinkActive(id: string, active: boolean) {
+  const { supabase } = await requireUser();
+  await supabase.from("links").update({ active }).eq("id", id);
+  revalidatePath(`/links/${id}`);
+  revalidatePath("/");
 }

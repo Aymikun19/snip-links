@@ -18,7 +18,7 @@ export function referrerHost(ref: string | null): string {
 }
 
 const SLUG = /^[a-zA-Z0-9_-]{3,32}$/;
-const RESERVED = new Set(["login", "links", "auth", "api", "admin", "_next"]);
+const RESERVED = new Set(["login", "links", "auth", "api", "admin", "_next", "gone", "account", "forgot", "manifest"]);
 export function validSlug(s: string) {
   return SLUG.test(s) && !RESERVED.has(s.toLowerCase());
 }

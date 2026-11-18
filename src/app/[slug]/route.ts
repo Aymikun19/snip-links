@@ -12,5 +12,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     p_country: request.headers.get("x-vercel-ip-country"), // set automatically on Vercel
   });
   if (!url) return NextResponse.redirect(new URL("/?notfound=" + encodeURIComponent(slug), request.url));
+  if (url === "!paused" || url === "!expired")
+    return NextResponse.redirect(new URL(`/gone?slug=${encodeURIComponent(slug)}&why=${(url as string).slice(1)}`, request.url));
   return NextResponse.redirect(url as string, 307);
 }

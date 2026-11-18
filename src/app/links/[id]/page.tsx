@@ -9,6 +9,8 @@ import { CopyButton } from "@/components/kit/CopyButton";
 import { Stat } from "@/components/kit/Stat";
 import { Charts } from "./Charts";
 import { EditLink } from "./EditLink";
+import { PauseToggle } from "./PauseToggle";
+import { linkState } from "@/lib/link-state";
 
 export default async function LinkStats({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -24,6 +26,8 @@ export default async function LinkStats({ params }: { params: Promise<{ id: stri
     QRCode.toDataURL(short, { width: 600, margin: 1 }),
     QRCode.toString(short, { type: "svg", margin: 1 }),
   ]);
+  const state = linkState(link);
+  const expiresDay = link.expires_at ? new Date(new Date(link.expires_at).getTime() + 3600_000).toISOString().slice(0, 10) : null;
   const mobile = humans.filter((c) => c.device === "mobile").length;
 
   return (
@@ -31,7 +35,10 @@ export default async function LinkStats({ params }: { params: Promise<{ id: stri
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
           <Link href="/" className="text-sm text-stone-500 hover:text-accent">Your links</Link>
-          <h1 className="page-title mt-1 font-mono">/{link.slug}</h1>
+          <h1 className="page-title mt-1 flex flex-wrap items-center gap-2 font-mono">
+            /{link.slug}
+            {state.label && <span className={`badge font-sans !text-xs ${state.tone}`}>{state.label}</span>}
+          </h1>
           {link.title && <p className="text-stone-700">{link.title}</p>}
           <p className="mt-1 flex items-center gap-1 truncate text-sm text-stone-500">
             <CornerDownRight size={14} className="shrink-0" aria-hidden /> <a href={link.url} className="truncate hover:underline">{link.url}</a>
@@ -39,7 +46,8 @@ export default async function LinkStats({ params }: { params: Promise<{ id: stri
         </div>
         <div className="flex flex-wrap gap-2">
           <CopyButton value={short} label="Copy short link" />
-          <EditLink id={link.id} url={link.url} title={link.title} />
+          <PauseToggle id={link.id} active={link.active} />
+          <EditLink id={link.id} url={link.url} title={link.title} expires={expiresDay} />
           <a href={`/links/${id}/export`} className="btn-outline"><Download size={15} aria-hidden /> CSV</a>
         </div>
       </div>

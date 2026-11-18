@@ -14,12 +14,12 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   if (!user) return <Landing />;
   const since = new Date(new Date().setUTCHours(0, 0, 0, 0) - 13 * 86_400_000).toISOString();
   const [{ data: links }, { data: recent }] = await Promise.all([
-    supabase.from("links").select("id, slug, url, title, created_at, clicks(count)").order("created_at", { ascending: false }),
+    supabase.from("links").select("id, slug, url, title, created_at, active, expires_at, clicks(count)").order("created_at", { ascending: false }),
     supabase.from("clicks").select("link_id, clicked_at, device").gte("clicked_at", since).neq("device", "bot").limit(20000),
   ]);
   const clicks = (recent ?? []) as (Click & { link_id: string })[];
   const rows: LinkRow[] = (links ?? []).map((l) => ({
-    id: l.id, slug: l.slug, url: l.url, title: l.title, created_at: l.created_at,
+    id: l.id, slug: l.slug, url: l.url, title: l.title, created_at: l.created_at, active: l.active, expires_at: l.expires_at,
     total: (l.clicks as unknown as { count: number }[])[0]?.count ?? 0,
     trend: dailySeries(clicks.filter((c) => c.link_id === l.id), 14).map((d) => d.clicks),
   }));
